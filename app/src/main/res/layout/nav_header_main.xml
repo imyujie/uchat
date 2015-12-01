@@ -8,7 +8,7 @@
     <ru.egslava.blurredview.BlurredImageView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:src="@drawable/avatar1"
+        android:src="@drawable/avatar2"
         android:scaleType="centerCrop"
         app:radius="1"
         app:keepOriginal="true"
@@ -16,25 +16,41 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:gravity="bottom">
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:id="@+id/imageView"
-            app:civ_border_width="0dp"
-            app:civ_border_color="#00000000"
-            android:src="@drawable/avatar1"
-            android:layout_marginBottom="0dp"
-            />
-        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:paddingTop="@dimen/nav_header_vertical_spacing" android:text="Android Studio"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:paddingLeft="16dp"
+            android:paddingBottom="6dp"
+            android:background="@drawable/bg_gradient">
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:paddingTop="@dimen/nav_header_vertical_spacing"
+                android:id="@+id/imageView"
+                app:civ_border_width="0dp"
+                app:civ_border_color="#00000000"
+                android:src="@drawable/avatar2"
+                android:layout_marginBottom="0dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="20dp">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:paddingTop="0dp" android:text="程老板"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="android.studio@android.com" android:id="@+id/textView" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="192.168.1.1" android:id="@+id/textView" />
+            </LinearLayout>
+        </LinearLayout>
+
+
     </LinearLayout>
 
 
