@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="@dimen/nav_header_height"
+    android:background="@drawable/background"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark" android:orientation="vertical"
+    android:gravity="bottom">
+    <ru.egslava.blurredview.BlurredImageView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:src="@drawable/avatar1"
+        android:scaleType="centerCrop"
+        app:radius="1"
+        app:keepOriginal="true"
+        app:downSampling="2" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="bottom">
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:id="@+id/imageView"
+            app:civ_border_width="0dp"
+            app:civ_border_color="#00000000"
+            android:src="@drawable/avatar1"
+            android:layout_marginBottom="0dp"
+            />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:paddingTop="@dimen/nav_header_vertical_spacing" android:text="Android Studio"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="android.studio@android.com" android:id="@+id/textView" />
+    </LinearLayout>
+
+
+</RelativeLayout>
