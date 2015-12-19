@@ -10,22 +10,35 @@
     tools:showIn="@layout/activity_chat">
 
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
         android:background="@drawable/edit_bg"
         android:orientation="horizontal"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp" >
+        android:paddingRight="16dp">
 
         <EditText
-            android:layout_width="match_parent"
+
+            android:id="@+id/edit_msg"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:background="@color/white"
-            android:inputType="text" />
-    </LinearLayout>
+            android:inputType="text"
+            android:text="Input Message Here!" />
+
+        <Button
+            android:id="@+id/send_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:text="发送" />
+
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/bubble_list"
@@ -37,5 +50,6 @@
         android:dividerHeight="10dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp" />
+
 
 </RelativeLayout>

@@ -1,11 +1,16 @@
 package com.sysu.bigmans.uchat;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,62 +21,68 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private void renderListView() {
-        ListView chatList = (ListView) findViewById(R.id.chatsList);
-        String[] arr = new String[] {"程老板", "崔大神"};
-        String[] msgs = new String[] {"我有一只小毛驴我从来都不骑，啦啦啦，我是用来充数的拉", "哈哈哈，哦~"};
-        int[] imageIds = new int[] {R.drawable.avatar1, R.drawable.avatar2};
-        List<Map<String, Object>> listItems = new ArrayList<Map<String, Object>>();
+    private ContactAdapter cAdapter;
+    public static final int ROLE_SERVER = 1;
+    public static final int ROLE_CLIENT = 0;
+    private Dialog alertDialog;
+    private LayoutInflater layoutInflater;
+    private ListView contactList;
 
-        for (int i = 0; i < arr.length; i++) {
-            Map<String, Object> listItem = new HashMap<String, Object>();
-            listItem.put("name", arr[i]);
-            listItem.put("msg", msgs[i]);
-            listItem.put("avatar", imageIds[i]);
-            listItems.add(listItem);
+    public class ActivityReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            String ip_addr;
+            switch (action) {
+                case "com.sysu.bigmans.uchat.ADD_CONTACT_BROADCAST":
+                    ip_addr = intent.getStringExtra("address");
+                    Contact c = new Contact("Anonymous", "", ip_addr, ROLE_SERVER);
+                    MainActivity.this.addContact(c);
+                    break;
+                case "com.sysu.bigmans.uchat.RECEIVE_MSG":
+                    ip_addr = intent.getStringExtra("address");
+                    Log.d("MAIN_ACTIVITY", "New message comes!");
+                    break;
+                default:
+                    break;
+            }
+
         }
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, listItems, R.layout.chat_list_item,
-                new String[]{"name", "msg", "avatar"}, new int[] {R.id.name, R.id.message, R.id.avatar});
+    }
+    private ActivityReceiver activityReceiver;
 
-        chatList.setAdapter(simpleAdapter);
+
+    private void renderListView() {
+        contactList = (ListView) findViewById(R.id.chatsList);
+        cAdapter = new ContactAdapter(this);
+        contactList.setAdapter(cAdapter);
     }
 
+    public void addContact(Contact c) {
+        cAdapter.addContact(c);
+    }
     public void addChatListener() {
-        ListView x = (ListView) findViewById(R.id.chatsList);
         final MainActivity that = this;
-        x.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        contactList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Contact c = cAdapter.getContactAt(position);
+                String ip_addr = c.getAddress();
+                String name = c.getName();
+
                 Intent intent = new Intent(that, ChatActivity.class);
-                intent.putExtra("target", "程老板");
+                intent.putExtra("name", name);
+                intent.putExtra("address", ip_addr);
+                intent.putExtra("role", c.getRole());
                 startActivity(intent);
             }
         });
-    }
-
-    private void blurAvatarBackground() {
-//        Blurry.with(MainActivity.this)
-//                .radius(25)
-//                .sampling(8)
-//                .color(Color.argb(255, 0, 255, 255))
-//
-//                .capture(findViewById(R.id.avatar_bg))
-//                .into((ImageView) findViewById(R.id.avatar_bg));
-
     }
 
     @Override
@@ -81,20 +92,55 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        this.layoutInflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View inputView = layoutInflater.inflate(R.layout.input_dialog, null);
+        alertDialog = new AlertDialog.Builder(this)
+                .setTitle("请输入IP地址")
+                .setView(inputView)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d("MAIN_ACTIVITY", "Confirm button was clicked!");
+                        EditText t = (EditText) inputView.findViewById(R.id.input_address);
+                        String ip_address = t.getText().toString();
+
+                        ((UApplication)getApplication()).createClient(ip_address);
+
+                        Log.d("MAIN_ACTIVITY", "Started client");
+
+                        Contact c = new Contact("Anonymous", "", ip_address, ROLE_CLIENT);
+                        addContact(c);
+                        Log.d("MAIN_ACTIVITY", "IP(" + ip_address + ") was added!");
+
+                        alertDialog.hide();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        alertDialog.hide();
+                    }
+                })
+                .create();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                alertDialog.show();
             }
         });
 
-        // 模糊头像背景
-        blurAvatarBackground();
-
         // 加载 ListView
         renderListView();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.sysu.bigmans.uchat.ADD_CONTACT_BROADCAST");
+        filter.addAction("com.sysu.bigmans.uchat.RECEIVE_MSG");
+
+        activityReceiver = new ActivityReceiver();
+        registerReceiver(activityReceiver, filter);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
