@@ -24,7 +24,7 @@ public class ClientSocketsManager {
     }
     public void add(String address, ChatManager session) {
         container.put(address, session);
-        Log.d("CLIENT_SOCKETS_MANAGER", "IP address(" + address + ") was added in.");
+        Log.i("CLIENT_SOCKETS_MANAGER", "IP address(" + address + ") was added in.");
     }
 
 

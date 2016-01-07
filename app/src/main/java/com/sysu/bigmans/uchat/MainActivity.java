@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity
     private ContactAdapter cAdapter;
     public static final int ROLE_SERVER = 1;
     public static final int ROLE_CLIENT = 0;
+    public static final String serverIP = "192.168.43.22";
     private Dialog alertDialog;
     private LayoutInflater layoutInflater;
     private ListView contactList;
@@ -47,7 +48,8 @@ public class MainActivity extends AppCompatActivity
                     break;
                 case "com.sysu.bigmans.uchat.RECEIVE_MSG":
                     ip_addr = intent.getStringExtra("address");
-                    Log.d("MAIN_ACTIVITY", "New message comes!");
+                    Log.i("MAIN_ACTIVITY", "New message comes!");
+                    // TODO: NOTIFY USERS
                     break;
                 default:
                     break;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity
     public void addContact(Contact c) {
         cAdapter.addContact(c);
     }
+
     public void addChatListener() {
         final MainActivity that = this;
         contactList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity
                 String ip_addr = c.getAddress();
                 String name = c.getName();
 
-                Intent intent = new Intent(that, ChatActivity.class);
+                Intent intent = new Intent(that, SingleChatActivity.class);
                 intent.putExtra("name", name);
                 intent.putExtra("address", ip_addr);
                 intent.putExtra("role", c.getRole());
@@ -101,17 +104,17 @@ public class MainActivity extends AppCompatActivity
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.d("MAIN_ACTIVITY", "Confirm button was clicked!");
+                        Log.i("MAIN_ACTIVITY", "Confirm button was clicked!");
                         EditText t = (EditText) inputView.findViewById(R.id.input_address);
                         String ip_address = t.getText().toString();
 
                         ((UApplication)getApplication()).createClient(ip_address);
 
-                        Log.d("MAIN_ACTIVITY", "Started client");
+                        Log.i("MAIN_ACTIVITY", "Started client");
 
                         Contact c = new Contact("Anonymous", "", ip_address, ROLE_CLIENT);
                         addContact(c);
-                        Log.d("MAIN_ACTIVITY", "IP(" + ip_address + ") was added!");
+                        Log.i("MAIN_ACTIVITY", "IP(" + ip_address + ") was added!");
 
                         alertDialog.hide();
                     }
@@ -195,7 +198,12 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camara) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-
+            Intent intent = new Intent(MainActivity.this, GroupChatActivity.class);
+            ((UApplication)getApplication()).createGroupClient(serverIP);
+            intent.putExtra("name", "test");
+            intent.putExtra("address", serverIP);
+            intent.putExtra("role", ROLE_CLIENT);
+            startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_share) {

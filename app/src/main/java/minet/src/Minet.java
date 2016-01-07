@@ -33,6 +33,7 @@ public class Minet extends Thread {
             socket = new Socket(this.address, DEFAULT_PORT);
             client = new ChatManager(socket, this.address, handler);
             ClientSocketsManager.getInstance().add(this.address, client);
+            Log.i("MINET", this.address);
             new Thread(client).start();
         } catch (Exception e) {
             e.printStackTrace();

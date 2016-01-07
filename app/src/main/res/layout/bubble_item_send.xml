@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/send_bubble">
+    android:orientation="horizontal">
+
+
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="jkldgdskgsjdkcjdlsa jdkglds jdkslgsd jgklds cjdls jdglksjkenkvd dsgjklger"
+        android:text="jkldgdskgsjdkcjdlsa klger"
+        android:layout_alignParentRight="true"
         android:textSize="14dp"
+        android:background="@drawable/uq"
         android:textColor="@color/black"
         android:id="@+id/bubble_text"
         />
-</LinearLayout>
+</RelativeLayout>

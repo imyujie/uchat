@@ -52,15 +52,37 @@ public class BubbleAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         ChatBubble msg = messageList.get(position);
+
+
+
         if (getItemViewType(position) == RECV) {
-            convertView = layoutInflater.inflate(R.layout.bubble_item, parent, false);
-            TextView textview = (TextView) convertView.findViewById(R.id.bubble_text);
-            textview.setText(msg.getContent());
+
+            if (msg instanceof TextBubble) {
+                convertView = layoutInflater.inflate(R.layout.bubble_item, parent, false);
+                TextView textview = (TextView) convertView.findViewById(R.id.bubble_text);
+                TextBubble tmsg = (TextBubble) msg;
+                textview.setText(tmsg.getContent());
+            } else {
+                FileBubble fmsg = (FileBubble) msg;
+                convertView = layoutInflater.inflate(R.layout.file_bubble_item, parent, false);
+                TextView textview = (TextView) convertView.findViewById(R.id.bubble_text);
+                textview.setText(fmsg.getFileName());
+            }
+
         } else {
-            convertView = layoutInflater.inflate(R.layout.bubble_item_send, parent, false);
-            TextView textview = (TextView) convertView.findViewById(R.id.bubble_text);
-            textview.setText(msg.getContent());
+            if (msg instanceof TextBubble) {
+                convertView = layoutInflater.inflate(R.layout.bubble_item_send, parent, false);
+                TextView textview = (TextView) convertView.findViewById(R.id.bubble_text);
+                TextBubble tmsg = (TextBubble) msg;
+                textview.setText(tmsg.getContent());
+            } else {
+                FileBubble fmsg = (FileBubble) msg;
+                convertView = layoutInflater.inflate(R.layout.file_bubble_item_send, parent, false);
+                TextView textview = (TextView) convertView.findViewById(R.id.bubble_text);
+                textview.setText(fmsg.getFileName());
+            }
         }
         return convertView;
     }

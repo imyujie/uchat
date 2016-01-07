@@ -35,7 +35,7 @@ public class Mirot extends Thread {
         try {
             socket = new ServerSocket(DEFAULT_PORT);
             state = true;
-            Log.d("MIROT", "Server started. Waiting for connect...");
+            Log.i("MIROT", "Server started. Waiting for connect...");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,18 +44,18 @@ public class Mirot extends Thread {
     public void run() {
         // blocking here
         while (state) {
-            Log.d("MIROT", "Enter loop!");
+            Log.i("MIROT", "Enter loop!");
             try {
                 Socket clientSocket = socket.accept(); // create a new socket for connection
                 String ip_address = clientSocket.getInetAddress().getHostAddress();
-                sendIPAddress(ip_address);
-                Log.d("MIROT", "Accepted socket from ip address: " + ip_address);
+                sendContact(ip_address); // send contact info to UApplication
+                Log.i("MIROT", "Accepted socket from ip address: " + ip_address);
 
                 client = new ChatManager(clientSocket, ip_address, handler);
                 ServerSocketsManager.getInstance().add(ip_address, client); // Store this client manager
 
                 new Thread(client).start();
-                Log.d("MIROT", "Thread started...");
+                Log.i("MIROT", "Thread started...");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -63,8 +63,9 @@ public class Mirot extends Thread {
         }
     }
 
-    private void sendIPAddress(String ip) {
+    private void sendContact(String ip) {
         Message msg = new Message();
+
         msg.what = ChatManager.SEND_CONTACT_MSG_TO_UI_THREAD;
         msg.obj = ip;
 

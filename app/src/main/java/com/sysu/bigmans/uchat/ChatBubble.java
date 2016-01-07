@@ -5,7 +5,6 @@ package com.sysu.bigmans.uchat;
  */
 public class ChatBubble {
     private String sender;
-    private String content;
     public static enum Type {
         RECV,
         SEND
@@ -21,13 +20,7 @@ public class ChatBubble {
         sender = s;
     }
 
-    public String getContent() {
-        return content;
-    }
 
-    public void setContent(String s) {
-        content = s;
-    }
 
     public Type getType() {
         return type;

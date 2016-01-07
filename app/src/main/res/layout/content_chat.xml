@@ -8,7 +8,13 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.sysu.bigmans.uchat.ChatActivity"
     tools:showIn="@layout/activity_chat">
-
+    <Button
+        android:id="@+id/choose_file"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:text="选择文件" />
 
     <RelativeLayout
         android:id="@+id/input_layout"
@@ -30,6 +36,8 @@
             android:inputType="text"
             android:text="Input Message Here!" />
 
+
+
         <Button
             android:id="@+id/send_msg"
             android:layout_width="wrap_content"
@@ -37,6 +45,7 @@
             android:layout_alignParentRight="true"
             android:gravity="center"
             android:text="发送" />
+
 
     </RelativeLayout>
 
